@@ -1,44 +1,34 @@
 package com.example.demo.entity;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SupplyForecast {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // ✅ Available supply in MW (>= 0)
     private Double availableSupplyMW;
-    private Timestamp forecastStart;
-    private Timestamp forecastEnd;
-    private Timestamp generatedAt;
 
-    public SupplyForecast() {}
+    private Instant forecastStart;
+    private Instant forecastEnd;
 
-    public Long getId() { return id; }
-
-    public Double getAvailableSupplyMW() { return availableSupplyMW; }
-    public void setAvailableSupplyMW(Double availableSupplyMW) {
-        this.availableSupplyMW = availableSupplyMW;
-    }
-
-    public Timestamp getForecastStart() { return forecastStart; }
-    public void setForecastStart(Timestamp forecastStart) { this.forecastStart = forecastStart; }
-
-    public Timestamp getForecastEnd() { return forecastEnd; }
-    public void setForecastEnd(Timestamp forecastEnd) { this.forecastEnd = forecastEnd; }
-
-    public Timestamp getGeneratedAt() { return generatedAt; }
+    // ✅ Auto-set timestamp (IMPORTANT for tests)
+    private Instant generatedAt;
 
     @PrePersist
     public void onCreate() {
-        generatedAt = new Timestamp(System.currentTimeMillis());
+        this.generatedAt = Instant.now();
     }
 }

@@ -13,60 +13,64 @@ import com.example.demo.service.SupplyForecastService;
 @Service
 public class SupplyForecastServiceImpl implements SupplyForecastService {
 
-    private final SupplyForecastRepository supplyForecastRepository;
+    private final SupplyForecastRepository forecastRepository;
 
-    public SupplyForecastServiceImpl(SupplyForecastRepository supplyForecastRepository) {
-        this.supplyForecastRepository = supplyForecastRepository;
+    // ✅ Constructor injection (tests use this)
+    public SupplyForecastServiceImpl(SupplyForecastRepository forecastRepository) {
+        this.forecastRepository = forecastRepository;
     }
 
     @Override
     public SupplyForecast createForecast(SupplyForecast forecast) {
 
-        if (forecast.getAvailableSupplyMW() == null ||
-            forecast.getAvailableSupplyMW() < 0) {
-            throw new BadRequestException(">=0");
+        // supply must be >= 0
+        if (forecast.getAvailableSupplyMW() < 0) {
+            throw new BadRequestException("availableSupplyMW must be >= 0");
         }
 
-        return supplyForecastRepository.save(forecast);
+        // start < end
+        if (forecast.getForecastStart().isAfter(forecast.getForecastEnd())) {
+            throw new BadRequestException("Invalid time range");
+        }
+
+        return forecastRepository.save(forecast);
     }
 
     @Override
     public SupplyForecast updateForecast(Long id, SupplyForecast forecast) {
 
-        SupplyForecast existing = supplyForecastRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+        SupplyForecast existing = forecastRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Forecast not found"));
 
-        if (forecast.getAvailableSupplyMW() != null &&
-            forecast.getAvailableSupplyMW() < 0) {
-            throw new BadRequestException(">=0");
+        if (forecast.getAvailableSupplyMW() < 0) {
+            throw new BadRequestException("availableSupplyMW must be >= 0");
+        }
+
+        if (forecast.getForecastStart().isAfter(forecast.getForecastEnd())) {
+            throw new BadRequestException("Invalid time range");
         }
 
         existing.setAvailableSupplyMW(forecast.getAvailableSupplyMW());
         existing.setForecastStart(forecast.getForecastStart());
         existing.setForecastEnd(forecast.getForecastEnd());
 
-        return supplyForecastRepository.save(existing);
+        return forecastRepository.save(existing);
     }
 
     @Override
     public SupplyForecast getForecastById(Long id) {
-        return supplyForecastRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+        return forecastRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Forecast not found"));
     }
 
     @Override
     public SupplyForecast getLatestForecast() {
-        SupplyForecast forecast =
-                supplyForecastRepository.findFirstByOrderByGeneratedAtDesc();
-
-        if (forecast == null) {
-            throw new ResourceNotFoundException("not found");
-        }
-        return forecast;
+        return forecastRepository.findFirstByOrderByGeneratedAtDesc()
+                .orElseThrow(() -> new ResourceNotFoundException("No forecasts"));
     }
 
     @Override
     public List<SupplyForecast> getAllForecasts() {
-        return supplyForecastRepository.findAll();
+        return forecastRepository.findAll();
     }
 }

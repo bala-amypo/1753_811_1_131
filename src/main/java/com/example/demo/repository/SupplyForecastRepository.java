@@ -1,10 +1,16 @@
 package com.example.demo.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.SupplyForecast;
 
-public interface SupplyForecastRepository extends JpaRepository<SupplyForecast, Long> {
+@Repository
+public interface SupplyForecastRepository
+        extends JpaRepository<SupplyForecast, Long> {
 
-    SupplyForecast findFirstByOrderByGeneratedAtDesc();
+    // ✅ Get latest forecast (tests depend on this exact name)
+    Optional<SupplyForecast> findFirstByOrderByGeneratedAtDesc();
 }

@@ -2,55 +2,53 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entity.SupplyForecast;
 import com.example.demo.service.SupplyForecastService;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 @RestController
 @RequestMapping("/api/supply-forecasts")
-@Tag(name = "Supply Forecasts")
 public class SupplyForecastController {
 
     private final SupplyForecastService supplyForecastService;
 
+    // ✅ constructor injection
     public SupplyForecastController(SupplyForecastService supplyForecastService) {
         this.supplyForecastService = supplyForecastService;
     }
 
+    // ✅ CREATE
     @PostMapping
-    public SupplyForecast create(@RequestBody SupplyForecast forecast) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public SupplyForecast createForecast(@RequestBody SupplyForecast forecast) {
         return supplyForecastService.createForecast(forecast);
     }
 
+    // ✅ UPDATE
     @PutMapping("/{id}")
-    public SupplyForecast update(
+    public SupplyForecast updateForecast(
             @PathVariable Long id,
-            @RequestBody SupplyForecast forecast
-    ) {
+            @RequestBody SupplyForecast forecast) {
         return supplyForecastService.updateForecast(id, forecast);
     }
 
+    // ✅ GET BY ID
     @GetMapping("/{id}")
-    public SupplyForecast getById(@PathVariable Long id) {
+    public SupplyForecast getForecastById(@PathVariable Long id) {
         return supplyForecastService.getForecastById(id);
     }
 
+    // ✅ GET LATEST
     @GetMapping("/latest")
-    public SupplyForecast getLatest() {
+    public SupplyForecast getLatestForecast() {
         return supplyForecastService.getLatestForecast();
     }
 
+    // ✅ GET ALL
     @GetMapping
-    public List<SupplyForecast> getAll() {
+    public List<SupplyForecast> getAllForecasts() {
         return supplyForecastService.getAllForecasts();
     }
 }
