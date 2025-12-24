@@ -16,20 +16,21 @@ public class ZoneServiceImpl implements ZoneService {
 
     private final ZoneRepository zoneRepository;
 
-    // ✅ Constructor injection (tests EXPECT this)
+    // ✅ Constructor injection (tests REQUIRE this exact constructor)
     public ZoneServiceImpl(ZoneRepository zoneRepository) {
         this.zoneRepository = zoneRepository;
     }
 
+    // ✅ CREATE ZONE
     @Override
     public Zone createZone(Zone zone) {
 
-        // priority >= 1 validation
-        if (zone.getPriorityLevel() == null || zone.getPriorityLevel() < 1) {
+        // priority validation
+        if (zone.getPriorityLevel() < 1) {
             throw new BadRequestException("priorityLevel must be >= 1");
         }
 
-        // unique zoneName validation
+        // unique zoneName check
         zoneRepository.findByZoneName(zone.getZoneName())
                 .ifPresent(z -> {
                     throw new BadRequestException("zoneName must be unique");
@@ -43,13 +44,14 @@ public class ZoneServiceImpl implements ZoneService {
         return zoneRepository.save(zone);
     }
 
+    // ✅ UPDATE ZONE
     @Override
     public Zone updateZone(Long id, Zone zone) {
 
         Zone existing = zoneRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
 
-        if (zone.getPriorityLevel() != null && zone.getPriorityLevel() < 1) {
+        if (zone.getPriorityLevel() < 1) {
             throw new BadRequestException("priorityLevel must be >= 1");
         }
 
@@ -61,17 +63,20 @@ public class ZoneServiceImpl implements ZoneService {
         return zoneRepository.save(existing);
     }
 
+    // ✅ GET ZONE BY ID
     @Override
     public Zone getZoneById(Long id) {
         return zoneRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
     }
 
+    // ✅ GET ALL ZONES
     @Override
     public List<Zone> getAllZones() {
         return zoneRepository.findAll();
     }
 
+    // ✅ DEACTIVATE ZONE
     @Override
     public void deactivateZone(Long id) {
 
