@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.entity.Zone;
 
 public interface ZoneRepository extends JpaRepository<Zone, Long> {
-    Optional<Zone> findByZoneName(String name);
+
+    Optional<Zone> findByZoneName(String zoneName);
+
     List<Zone> findByActiveTrueOrderByPriorityLevelAsc();
 }
