@@ -1,55 +1,36 @@
 package com.example.demo.entity;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class LoadSheddingEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    // each event belongs to a zone
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "zone_id")
     private Zone zone;
 
-    private Timestamp eventStart;
-    private Timestamp eventEnd;
+    private Instant eventStart;
+
+    private Instant eventEnd;
+
     private String reason;
+
     private Long triggeredByForecastId;
+
+    // must be >= 0
     private Double expectedDemandReductionMW;
-
-    public LoadSheddingEvent() {}
-
-    public Long getId() { return id; }
-
-    public Zone getZone() { return zone; }
-    public void setZone(Zone zone) { this.zone = zone; }
-
-    public Timestamp getEventStart() { return eventStart; }
-    public void setEventStart(Timestamp eventStart) { this.eventStart = eventStart; }
-
-    public Timestamp getEventEnd() { return eventEnd; }
-    public void setEventEnd(Timestamp eventEnd) { this.eventEnd = eventEnd; }
-
-    public String getReason() { return reason; }
-    public void setReason(String reason) { this.reason = reason; }
-
-    public Long getTriggeredByForecastId() { return triggeredByForecastId; }
-    public void setTriggeredByForecastId(Long triggeredByForecastId) {
-        this.triggeredByForecastId = triggeredByForecastId;
-    }
-
-    public Double getExpectedDemandReductionMW() {
-        return expectedDemandReductionMW;
-    }
-
-    public void setExpectedDemandReductionMW(Double expectedDemandReductionMW) {
-        this.expectedDemandReductionMW = expectedDemandReductionMW;
-    }
 }

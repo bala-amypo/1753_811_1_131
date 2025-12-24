@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -21,11 +22,11 @@ public class ZoneRestorationServiceImpl implements ZoneRestorationService {
     private final LoadSheddingEventRepository eventRepo;
     private final ZoneRepository zoneRepo;
 
+    // ⚠️ ORDER MATTERS – tests instantiate with this constructor
     public ZoneRestorationServiceImpl(
             ZoneRestorationRecordRepository restorationRepo,
             LoadSheddingEventRepository eventRepo,
-            ZoneRepository zoneRepo
-    ) {
+            ZoneRepository zoneRepo) {
         this.restorationRepo = restorationRepo;
         this.eventRepo = eventRepo;
         this.zoneRepo = zoneRepo;
@@ -34,24 +35,28 @@ public class ZoneRestorationServiceImpl implements ZoneRestorationService {
     @Override
     public ZoneRestorationRecord restoreZone(ZoneRestorationRecord record) {
 
-        Zone zone = zoneRepo.findById(record.getZone().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
-
+        // event must exist
         LoadSheddingEvent event = eventRepo.findById(record.getEventId())
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
 
-        if (record.getRestoredAt().before(event.getEventStart())) {
-        throw new BadRequestException("after event start");
-}
+        // zone must exist
+        Zone zone = zoneRepo.findById(record.getZone().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
 
+        // restoredAt must be after eventStart
+        Instant restoredAt = record.getRestoredAt();
+        if (restoredAt.isBefore(event.getEventStart())) {
+            throw new BadRequestException("after event start");
+        }
 
+        record.setZone(zone);
         return restorationRepo.save(record);
     }
 
     @Override
     public ZoneRestorationRecord getRecordById(Long id) {
         return restorationRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Record not found"));
     }
 
     @Override
