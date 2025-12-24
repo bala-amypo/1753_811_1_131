@@ -2,17 +2,35 @@ package com.example.demo.controller;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
+import com.example.demo.entity.AppUser;
+import com.example.demo.service.AppUserService;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    @PostMapping("/login")
-    public String login() {
-        return "OK";
+    private final AppUserService appUserService;
+
+    public AuthController(AppUserService appUserService) {
+        this.appUserService = appUserService;
     }
 
     @PostMapping("/register")
-    public String register() {
-        return "OK";
+    public AppUser register(@RequestBody AuthRequest request) {
+        return appUserService.register(
+                request.getEmail(),
+                request.getPassword(),
+                "USER"
+        );
+    }
+
+    @PostMapping("/login")
+    public AuthResponse login(@RequestBody AuthRequest request) {
+        return appUserService.login(
+                request.getEmail(),
+                request.getPassword()
+        );
     }
 }
