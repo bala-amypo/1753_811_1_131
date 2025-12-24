@@ -1,9 +1,13 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Zone;
-public interface ZoneService {
+import java.util.List;
 
-    Zone addZone(Zone z);
-    Zone setZone(int id);
-    Zone deletZone(int id);
+import com.example.demo.entity.Zone;
+
+public interface ZoneService {
+    Zone createZone(Zone zone);
+    Zone updateZone(Long id, Zone zone);
+    Zone getZoneById(Long id);
+    List<Zone> getAllZones();
+    void deactivateZone(Long id);
 }
