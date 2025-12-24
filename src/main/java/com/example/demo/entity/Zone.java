@@ -1,70 +1,60 @@
 package com.example.demo.entity;
 
+import java.time.Instant;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Table(name = "zones")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Zone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String zoneName;
-    private int priorityLevel;
-    private int population;
-    private boolean active;
 
-    public Zone() {
+    @Column(nullable = false)
+    private Integer priorityLevel;
+
+    private Integer population;
+
+    @Builder.Default
+    private Boolean active = true;
+
+    private Instant createdAt;
+    private Instant updatedAt;
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
+        if (this.active == null) {
+            this.active = true;
+        }
     }
 
-    public Zone(Long id, String zoneName, int priorityLevel, int population, boolean active) {
-        this.id = id;
-        this.zoneName = zoneName;
-        this.priorityLevel = priorityLevel;
-        this.population = population;
-        this.active = active;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getZoneName() {
-        return zoneName;
-    }
-
-    public void setZoneName(String zoneName) {
-        this.zoneName = zoneName;
-    }
-
-    public int getPriorityLevel() {
-        return priorityLevel;
-    }
-
-    public void setPriorityLevel(int priorityLevel) {
-        this.priorityLevel = priorityLevel;
-    }
-
-    public int getPopulation() {
-        return population;
-    }
-
-    public void setPopulation(int population) {
-        this.population = population;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = Instant.now();
     }
 }
