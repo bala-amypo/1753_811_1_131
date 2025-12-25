@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface ZoneRestorationService {
 
-    ZoneRestorationRecord restoreZone(Long zoneId);
+    ZoneRestorationRecord restoreZone(ZoneRestorationRecord record);
 
-    ZoneRestorationRecord getById(Long id);
+    ZoneRestorationRecord getRecordById(Long id);
 
-    List<ZoneRestorationRecord> getByZone(Long zoneId);
+    List<ZoneRestorationRecord> getRecordsForZone(Long zoneId);
 }
