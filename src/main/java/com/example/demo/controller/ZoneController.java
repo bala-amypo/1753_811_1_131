@@ -1,7 +1,9 @@
 package com.example.demo.controller;
+
 import com.example.demo.entity.Zone;
 import com.example.demo.service.ZoneService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -14,33 +16,33 @@ public class ZoneController {
         this.service = service;
     }
 
-    // already exists (KEEP)
+    // GET /api/zones
     @GetMapping
-    public List<Zone> getAll() {
+    public List<Zone> getAllZones() {
         return service.getAllZones();
     }
 
-    // ➕ ADD
+    // GET /api/zones/{id}
     @GetMapping("/{id}")
-    public Zone getById(@PathVariable Long id) {
-        return service.getZone(id);
+    public Zone getZone(@PathVariable Long id) {
+        return service.getZoneById(id);
     }
 
-    // ➕ ADD
+    // POST /api/zones
     @PostMapping
-    public Zone create(@RequestBody Zone zone) {
+    public Zone createZone(@RequestBody Zone zone) {
         return service.createZone(zone);
     }
 
-    // ➕ ADD
+    // PUT /api/zones/{id}
     @PutMapping("/{id}")
-    public Zone update(@PathVariable Long id, @RequestBody Zone zone) {
+    public Zone updateZone(@PathVariable Long id, @RequestBody Zone zone) {
         return service.updateZone(id, zone);
     }
 
-    // ➕ ADD (soft delete)
-    @DeleteMapping("/{id}")
-    public void deactivate(@PathVariable Long id) {
+    // PUT /api/zones/{id}/deactivate
+    @PutMapping("/{id}/deactivate")
+    public void deactivateZone(@PathVariable Long id) {
         service.deactivateZone(id);
     }
 }

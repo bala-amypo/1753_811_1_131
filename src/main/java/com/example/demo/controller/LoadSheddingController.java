@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.LoadSheddingEvent;
 import com.example.demo.service.LoadSheddingService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -15,21 +16,27 @@ public class LoadSheddingController {
         this.service = service;
     }
 
-    // already exists
+    // POST /api/load-shedding/trigger/{forecastId}
     @PostMapping("/trigger/{forecastId}")
     public LoadSheddingEvent trigger(@PathVariable Long forecastId) {
         return service.triggerLoadShedding(forecastId);
     }
 
-    // ➕ ADD
+    // GET /api/load-shedding
     @GetMapping
     public List<LoadSheddingEvent> getAll() {
         return service.getAllEvents();
     }
 
-    // ➕ ADD
+    // GET /api/load-shedding/{id}
     @GetMapping("/{id}")
     public LoadSheddingEvent getById(@PathVariable Long id) {
         return service.getEventById(id);
+    }
+
+    // GET /api/load-shedding/zone/{zoneId}
+    @GetMapping("/zone/{zoneId}")
+    public List<LoadSheddingEvent> getByZone(@PathVariable Long zoneId) {
+        return service.getEventsForZone(zoneId);
     }
 }
