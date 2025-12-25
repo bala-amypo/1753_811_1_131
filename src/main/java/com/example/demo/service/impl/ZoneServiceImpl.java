@@ -17,38 +17,46 @@ public class ZoneServiceImpl implements ZoneService {
         this.zoneRepository = zoneRepository;
     }
 
+    // CREATE
     @Override
     public Zone createZone(Zone zone) {
+        zone.setActive(true);
         return zoneRepository.save(zone);
     }
 
+    // GET BY ID
     @Override
     public Zone getZoneById(Long id) {
         return zoneRepository.findById(id).orElse(null);
     }
 
+    // GET ALL
     @Override
     public List<Zone> getAllZones() {
         return zoneRepository.findAll();
     }
 
+    // UPDATE
     @Override
-    public Zone updateZone(Long id, Zone zone) {
-        Zone existing = zoneRepository.findById(id).orElse(null);
-        if (existing == null) {
-            return null;
-        }
+    public Zone updateZone(Long id, Zone updatedZone) {
+        Zone zone = zoneRepository.findById(id).orElse(null);
 
-        existing.setZoneName(zone.getZoneName());
-        existing.setPriorityLevel(zone.getPriorityLevel());
-        existing.setPopulation(zone.getPopulation());
-        existing.setActive(zone.isActive());
+        if (zone == null) return null;
 
-        return zoneRepository.save(existing);
+        zone.setZoneName(updatedZone.getZoneName());
+        zone.setPriorityLevel(updatedZone.getPriorityLevel());
+        zone.setPopulation(updatedZone.getPopulation());
+
+        return zoneRepository.save(zone);
     }
 
+    // ✅ DEACTIVATE (YOU ASKED THIS)
     @Override
-    public void deleteZone(Long id) {
-        zoneRepository.deleteById(id);
+    public void deactivateZone(Long id) {
+        Zone zone = zoneRepository.findById(id).orElse(null);
+        if (zone != null) {
+            zone.setActive(false);
+            zoneRepository.save(zone);
+        }
     }
 }
