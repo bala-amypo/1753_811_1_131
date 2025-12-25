@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LoadSheddingServiceImpl implements LoadSheddingService {
@@ -36,7 +37,11 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
         SupplyForecast forecast = forecastRepository.findById(forecastId)
                 .orElseThrow(() -> new RuntimeException("Forecast not found"));
 
-        List<Zone> activeZones = zoneRepository.findByActiveTrue();
+        // 🔑 findAll + filter (repository-safe)
+        List<Zone> activeZones = zoneRepository.findAll().stream()
+                .filter(Zone::getActive)
+                .collect(Collectors.toList());
+
         if (activeZones.isEmpty()) {
             throw new RuntimeException("No active zones available");
         }
@@ -67,7 +72,9 @@ public class LoadSheddingServiceImpl implements LoadSheddingService {
     // 3️⃣ Get events for a zone
     @Override
     public List<LoadSheddingEvent> getEventsForZone(Long zoneId) {
-        return eventRepository.findByZoneId(zoneId);
+        return eventRepository.findAll().stream()
+                .filter(e -> e.getZone() != null && e.getZone().getId().equals(zoneId))
+                .collect(Collectors.toList());
     }
 
     // 4️⃣ Get all events
