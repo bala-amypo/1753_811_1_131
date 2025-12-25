@@ -3,7 +3,6 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.DemandReading;
 import com.example.demo.repository.DemandReadingRepository;
 import com.example.demo.service.DemandReadingService;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -19,7 +18,7 @@ public class DemandReadingServiceImpl implements DemandReadingService {
     }
 
     @Override
-    public DemandReading create(DemandReading reading) {
+    public DemandReading save(DemandReading reading) {
         reading.setRecordedAt(Instant.now());
         return repo.save(reading);
     }
@@ -30,20 +29,12 @@ public class DemandReadingServiceImpl implements DemandReadingService {
     }
 
     @Override
-    public List<DemandReading> getRecentByZone(Long zoneId) {
-        return repo.findByZoneIdOrderByRecordedAtDesc(
-                zoneId,
-                PageRequest.of(0, 5)
-        );
+    public List<DemandReading> getRecent(Long zoneId) {
+        return repo.findTop5ByZoneIdOrderByRecordedAtDesc(zoneId);
     }
 
     @Override
-    public DemandReading getLatestByZone(Long zoneId) {
-        List<DemandReading> list =
-                repo.findByZoneIdOrderByRecordedAtDesc(
-                        zoneId,
-                        PageRequest.of(0, 1)
-                );
-        return list.isEmpty() ? null : list.get(0);
+    public DemandReading getLatest(Long zoneId) {
+        return repo.findTopByZoneIdOrderByRecordedAtDesc(zoneId).orElse(null);
     }
 }
