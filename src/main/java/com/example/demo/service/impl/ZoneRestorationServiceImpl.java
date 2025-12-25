@@ -2,36 +2,29 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.ZoneRestorationRecord;
 import com.example.demo.repository.ZoneRestorationRepository;
+import com.example.demo.service.ZoneRestorationService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;   // ✅ VERY IMPORTANT IMPORT
+import java.util.List;
 
 @Service
-public class ZoneRestorationServiceImpl {
+public class ZoneRestorationServiceImpl implements ZoneRestorationService {
 
-    private final ZoneRestorationRepository repo;   // ✅ repo declared
+    private final ZoneRestorationRepository repository;
 
-    public ZoneRestorationServiceImpl(ZoneRestorationRepository repo) {
-        this.repo = repo;
+    public ZoneRestorationServiceImpl(ZoneRestorationRepository repository) {
+        this.repository = repository;
     }
 
-    // CREATE
-    public ZoneRestorationRecord save(ZoneRestorationRecord record) {
-        return repo.save(record);
+    @Override
+    public ZoneRestorationRecord restoreZone(Long eventId) {
+        ZoneRestorationRecord record = new ZoneRestorationRecord();
+        record.setEventId(eventId);
+        return repository.save(record);
     }
 
-    // READ ALL
+    @Override
     public List<ZoneRestorationRecord> getAll() {
-        return repo.findAll();
-    }
-
-    // READ BY ID
-    public ZoneRestorationRecord getById(Long id) {
-        return repo.findById(id).orElse(null);
-    }
-
-    // DELETE
-    public void delete(Long id) {
-        repo.deleteById(id);
+        return repository.findAll();
     }
 }
