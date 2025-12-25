@@ -16,8 +16,8 @@ public class ZoneRestorationController {
         this.service = service;
     }
 
-    @GetMapping
-    public List<ZoneRestorationRecord> getAll() {
-        return service.getAll();
+    @GetMapping("/zone/{zoneId}")
+    public List<ZoneRestorationRecord> getByZone(@PathVariable Long zoneId) {
+        return service.getByZone(zoneId);
     }
 }
