@@ -18,7 +18,6 @@ public class DemandReading {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "zone_id")
     private Zone zone;
 
     private Double demandMW;
