@@ -1,9 +1,6 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +15,7 @@ public class ZoneRestorationRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 🔥 THIS WAS MISSING
+    // 🔥 REQUIRED for findByZoneId
     private Long zoneId;
 
     private String action;
