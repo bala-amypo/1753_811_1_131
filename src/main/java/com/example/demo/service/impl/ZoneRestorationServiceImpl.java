@@ -1,50 +1,37 @@
 package com.example.demo.service.impl;
-import java.util.List; 
-import com.example.demo.entity.LoadSheddingEvent;
+
 import com.example.demo.entity.ZoneRestorationRecord;
-import com.example.demo.repository.LoadSheddingEventRepository;
-import com.example.demo.repository.ZoneRestorationRecordRepository;
-import com.example.demo.service.ZoneRestorationService;
+import com.example.demo.repository.ZoneRestorationRepository;
 import org.springframework.stereotype.Service;
 
-
-import java.time.Instant;
+import java.util.List;   // ✅ VERY IMPORTANT IMPORT
 
 @Service
-public class ZoneRestorationServiceImpl implements ZoneRestorationService {
+public class ZoneRestorationServiceImpl {
 
-    private final LoadSheddingEventRepository eventRepo;
-    private final ZoneRestorationRecordRepository recordRepo;
+    private final ZoneRestorationRepository repo;   // ✅ repo declared
 
-    public ZoneRestorationServiceImpl(
-            LoadSheddingEventRepository eventRepo,
-            ZoneRestorationRecordRepository recordRepo
-    ) {
-        this.eventRepo = eventRepo;
-        this.recordRepo = recordRepo;
+    public ZoneRestorationServiceImpl(ZoneRestorationRepository repo) {
+        this.repo = repo;
     }
-    @Override
-public List<ZoneRestorationRecord> getAll() {
-    return repo.findAll();
-}
 
+    // CREATE
+    public ZoneRestorationRecord save(ZoneRestorationRecord record) {
+        return repo.save(record);
+    }
 
-    @Override
-    public ZoneRestorationRecord restoreZone(Long eventId) {
+    // READ ALL
+    public List<ZoneRestorationRecord> getAll() {
+        return repo.findAll();
+    }
 
-        LoadSheddingEvent event = eventRepo.findById(eventId)
-                .orElseThrow(() -> new RuntimeException("Event not found"));
+    // READ BY ID
+    public ZoneRestorationRecord getById(Long id) {
+        return repo.findById(id).orElse(null);
+    }
 
-        // Test expects Instant comparison
-        if (event.getEventStart().isAfter(Instant.now())) {
-            throw new RuntimeException("Cannot restore before event start");
-        }
-
-        ZoneRestorationRecord record = new ZoneRestorationRecord();
-        record.setEventId(event.getId());      // ✅ correct
-        record.setZone(event.getZone());       // ✅ correct
-        record.setRestoredAt(Instant.now());   // ✅ Instant (not LocalDateTime)
-
-        return recordRepo.save(record);
+    // DELETE
+    public void delete(Long id) {
+        repo.deleteById(id);
     }
 }
