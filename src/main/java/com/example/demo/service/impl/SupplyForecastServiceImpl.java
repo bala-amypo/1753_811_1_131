@@ -10,26 +10,35 @@ import java.util.List;
 @Service
 public class SupplyForecastServiceImpl implements SupplyForecastService {
 
-    private final SupplyForecastRepository repository;
+    private final SupplyForecastRepository repo;
 
-    public SupplyForecastServiceImpl(SupplyForecastRepository repository) {
-        this.repository = repository;
-    }
-
-    @Override
-    public SupplyForecast createForecast(SupplyForecast forecast) {
-        return repository.save(forecast);
-    }
-
-    @Override
-    public SupplyForecast getLatestForecast() {
-        return repository.findAll().stream()
-                .reduce((first, second) -> second)
-                .orElseThrow(() -> new RuntimeException("No forecast found"));
+    public SupplyForecastServiceImpl(SupplyForecastRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public List<SupplyForecast> getAllForecasts() {
-        return repository.findAll();
+        return repo.findAll();
+    }
+
+    @Override
+    public SupplyForecast getForecastById(Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    @Override
+    public SupplyForecast createForecast(SupplyForecast forecast) {
+        return repo.save(forecast);
+    }
+
+    @Override
+    public SupplyForecast updateForecast(Long id, SupplyForecast forecast) {
+        forecast.setId(id);
+        return repo.save(forecast);
+    }
+
+    @Override
+    public SupplyForecast getLatestForecast() {
+        return repo.findTopByOrderByForecastTimeDesc();
     }
 }

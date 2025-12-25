@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.ZoneRestorationRecord;
-import com.example.demo.repository.ZoneRestorationRepository;
+import com.example.demo.repository.ZoneRestorationRecordRepository;
 import com.example.demo.service.ZoneRestorationService;
 import org.springframework.stereotype.Service;
 
@@ -10,21 +10,26 @@ import java.util.List;
 @Service
 public class ZoneRestorationServiceImpl implements ZoneRestorationService {
 
-    private final ZoneRestorationRepository repository;
+    private final ZoneRestorationRecordRepository repo;
 
-    public ZoneRestorationServiceImpl(ZoneRestorationRepository repository) {
-        this.repository = repository;
+    public ZoneRestorationServiceImpl(ZoneRestorationRecordRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public ZoneRestorationRecord restoreZone(Long eventId) {
         ZoneRestorationRecord record = new ZoneRestorationRecord();
         record.setEventId(eventId);
-        return repository.save(record);
+        return repo.save(record);
     }
 
     @Override
-    public List<ZoneRestorationRecord> getAll() {
-        return repository.findAll();
+    public ZoneRestorationRecord getById(Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<ZoneRestorationRecord> getByZone(Long zoneId) {
+        return repo.findByZoneId(zoneId);
     }
 }
