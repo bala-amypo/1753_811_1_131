@@ -1,10 +1,15 @@
-package com.example.demo.controller;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 @RestController
-@RequestMapping("/restorations")
+@RequestMapping("/api/restorations")
 public class ZoneRestorationController {
-    // empty on purpose
+
+    private final ZoneRestorationService service;
+
+    public ZoneRestorationController(ZoneRestorationService service) {
+        this.service = service;
+    }
+
+    @GetMapping("/zone/{zoneId}")
+    public List<ZoneRestorationRecord> getByZone(@PathVariable Long zoneId) {
+        return service.getByZone(zoneId);
+    }
 }

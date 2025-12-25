@@ -1,10 +1,20 @@
-package com.example.demo.controller;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 @RestController
-@RequestMapping("/demand-readings")
+@RequestMapping("/api/demand-readings")
 public class DemandReadingController {
-    // empty on purpose
+
+    private final DemandReadingService service;
+
+    public DemandReadingController(DemandReadingService service) {
+        this.service = service;
+    }
+
+    @PostMapping
+    public DemandReading create(@RequestBody DemandReading r) {
+        return service.create(r);
+    }
+
+    @GetMapping("/zone/{zoneId}")
+    public List<DemandReading> getByZone(@PathVariable Long zoneId) {
+        return service.getByZone(zoneId);
+    }
 }

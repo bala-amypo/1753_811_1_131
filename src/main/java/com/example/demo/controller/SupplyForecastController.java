@@ -1,10 +1,20 @@
-package com.example.demo.controller;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 @RestController
-@RequestMapping("/supply-forecasts")
+@RequestMapping("/api/forecasts")
 public class SupplyForecastController {
-    // empty on purpose
+
+    private final SupplyForecastService service;
+
+    public SupplyForecastController(SupplyForecastService service) {
+        this.service = service;
+    }
+
+    @PostMapping
+    public SupplyForecast create(@RequestBody SupplyForecast f) {
+        return service.create(f);
+    }
+
+    @GetMapping("/latest")
+    public SupplyForecast latest() {
+        return service.getLatest();
+    }
 }
