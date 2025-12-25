@@ -1,11 +1,12 @@
 package com.example.demo.service.impl;
-
+import java.util.List; 
 import com.example.demo.entity.LoadSheddingEvent;
 import com.example.demo.entity.ZoneRestorationRecord;
 import com.example.demo.repository.LoadSheddingEventRepository;
 import com.example.demo.repository.ZoneRestorationRecordRepository;
 import com.example.demo.service.ZoneRestorationService;
 import org.springframework.stereotype.Service;
+
 
 import java.time.Instant;
 
@@ -22,6 +23,11 @@ public class ZoneRestorationServiceImpl implements ZoneRestorationService {
         this.eventRepo = eventRepo;
         this.recordRepo = recordRepo;
     }
+    @Override
+public List<ZoneRestorationRecord> getAll() {
+    return repo.findAll();
+}
+
 
     @Override
     public ZoneRestorationRecord restoreZone(Long eventId) {

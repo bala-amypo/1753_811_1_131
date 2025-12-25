@@ -17,12 +17,20 @@ public class DemandReadingServiceImpl implements DemandReadingService {
     }
 
     @Override
-    public DemandReading createReading(DemandReading reading) {
+    public List<DemandReading> getByZone(Long zoneId) {
+        return repo.findByZoneId(zoneId);
+    }
+
+    @Override
+    public DemandReading create(DemandReading reading) {
         return repo.save(reading);
     }
 
     @Override
-    public List<DemandReading> getReadingsForZone(Long zoneId) {
-        return repo.findByZoneId(zoneId);
+    public List<DemandReading> getRecentReadings(Long zoneId, int limit) {
+        return repo.findByZoneId(zoneId)
+                   .stream()
+                   .limit(limit)
+                   .toList();
     }
 }
