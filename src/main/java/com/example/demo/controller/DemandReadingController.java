@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.DemandReading;
+import com.example.demo.service.DemandReadingService;
 
-import com.example.demo.entity.Zone;
-import com.example.demo.service.ZoneService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/demand-readings")
 public class DemandReadingController {
@@ -14,15 +17,13 @@ public class DemandReadingController {
         this.service = service;
     }
 
-    // already exists
-    @GetMappingv("/zone/{zoneId}")
+    @GetMapping("/zone/{zoneId}")
     public List<DemandReading> getByZone(@PathVariable Long zoneId) {
-        return service.getReadingsForZone(zoneId);
+        return service.getByZone(zoneId);
     }
 
-    // ➕ ADD
     @PostMapping
     public DemandReading create(@RequestBody DemandReading reading) {
-        return service.createReading(reading);
+        return service.create(reading);
     }
 }
