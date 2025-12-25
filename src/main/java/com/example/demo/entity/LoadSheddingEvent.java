@@ -14,8 +14,8 @@ public class LoadSheddingEvent {
     private Zone zone;
 
     private Instant eventStart;
-    private Instant eventEnd;
 
+    // ✅ REQUIRED GETTERS / SETTERS
     public Long getId() {
         return id;
     }
@@ -34,13 +34,5 @@ public class LoadSheddingEvent {
 
     public void setEventStart(Instant eventStart) {
         this.eventStart = eventStart;
-    }
-
-    public Instant getEventEnd() {
-        return eventEnd;
-    }
-
-    public void setEventEnd(Instant eventEnd) {
-        this.eventEnd = eventEnd;
     }
 }
