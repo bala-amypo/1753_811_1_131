@@ -1,10 +1,17 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.DemandReading;
-import java.util.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface DemandReadingRepository {
-    DemandReading save(DemandReading r);
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface DemandReadingRepository
+        extends JpaRepository<DemandReading, Long> {
+
     List<DemandReading> findByZoneIdOrderByRecordedAtDesc(Long zoneId);
+
     Optional<DemandReading> findFirstByZoneIdOrderByRecordedAtDesc(Long zoneId);
 }
