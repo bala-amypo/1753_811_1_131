@@ -3,7 +3,6 @@ package com.example.demo.security;
 import com.example.demo.entity.AppUser;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -12,14 +11,13 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private Key secretKey;
+    private final Key secretKey;
 
-    private final long validityInMs = 3600000; // 1 hour
+    private static final long VALIDITY_MS = 3600000; // 1 hour
 
-    @PostConstruct
-    public void init() {
-        // 256-bit key (REQUIRED)
-        secretKey = Keys.hmacShaKeyFor(
+    // ✅ Constructor-based init (TEST-SAFE)
+    public JwtTokenProvider() {
+        this.secretKey = Keys.hmacShaKeyFor(
                 "THIS_IS_A_SECURE_SECRET_KEY_FOR_JWT_SIGNING_256_BITS_LONG"
                         .getBytes()
         );
@@ -31,7 +29,7 @@ public class JwtTokenProvider {
         claims.put("userId", user.getId());
 
         Date now = new Date();
-        Date expiry = new Date(now.getTime() + validityInMs);
+        Date expiry = new Date(now.getTime() + VALIDITY_MS);
 
         return Jwts.builder()
                 .setClaims(claims)
