@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // 🔥 THIS IS MANDATORY
+@Service
 public class SupplyForecastServiceImpl implements SupplyForecastService {
 
     private final SupplyForecastRepository repository;
@@ -17,19 +17,19 @@ public class SupplyForecastServiceImpl implements SupplyForecastService {
     }
 
     @Override
-    public SupplyForecast create(SupplyForecast forecast) {
+    public SupplyForecast createForecast(SupplyForecast forecast) {
         return repository.save(forecast);
     }
 
     @Override
-    public SupplyForecast getLatest() {
+    public SupplyForecast getLatestForecast() {
         return repository.findAll().stream()
                 .reduce((first, second) -> second)
                 .orElseThrow(() -> new RuntimeException("No forecast found"));
     }
 
     @Override
-    public List<SupplyForecast> getAll() {
+    public List<SupplyForecast> getAllForecasts() {
         return repository.findAll();
     }
 }
