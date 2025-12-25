@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.Zone;
 import com.example.demo.repository.ZoneRepository;
 import com.example.demo.service.ZoneService;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,6 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public Zone createZone(Zone zone) {
-        zone.setActive(true);
         return zoneRepository.save(zone);
     }
 
@@ -35,20 +35,20 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     public Zone updateZone(Long id, Zone zone) {
         Zone existing = zoneRepository.findById(id).orElse(null);
-        if (existing == null) return null;
+        if (existing == null) {
+            return null;
+        }
 
         existing.setZoneName(zone.getZoneName());
         existing.setPriorityLevel(zone.getPriorityLevel());
         existing.setPopulation(zone.getPopulation());
+        existing.setActive(zone.isActive());
+
         return zoneRepository.save(existing);
     }
 
     @Override
-    public Zone deactivateZone(Long id) {
-        Zone zone = zoneRepository.findById(id).orElse(null);
-        if (zone == null) return null;
-
-        zone.setActive(false);
-        return zoneRepository.save(zone);
+    public void deleteZone(Long id) {
+        zoneRepository.deleteById(id);
     }
 }
