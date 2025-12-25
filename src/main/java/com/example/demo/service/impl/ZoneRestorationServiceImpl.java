@@ -7,7 +7,7 @@ import com.example.demo.repository.ZoneRestorationRecordRepository;
 import com.example.demo.service.ZoneRestorationService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Service
 public class ZoneRestorationServiceImpl implements ZoneRestorationService {
@@ -25,17 +25,19 @@ public class ZoneRestorationServiceImpl implements ZoneRestorationService {
 
     @Override
     public ZoneRestorationRecord restoreZone(Long eventId) {
+
         LoadSheddingEvent event = eventRepo.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
 
-        if (event.getEventStart().isAfter(LocalDateTime.now())) {
+        // Test expects Instant comparison
+        if (event.getEventStart().isAfter(Instant.now())) {
             throw new RuntimeException("Cannot restore before event start");
         }
 
         ZoneRestorationRecord record = new ZoneRestorationRecord();
-        record.setEvent(event);
-        record.setZone(event.getZone());
-        record.setRestoredAt(LocalDateTime.now());
+        record.setEventId(event.getId());      // ✅ correct
+        record.setZone(event.getZone());       // ✅ correct
+        record.setRestoredAt(Instant.now());   // ✅ Instant (not LocalDateTime)
 
         return recordRepo.save(record);
     }
