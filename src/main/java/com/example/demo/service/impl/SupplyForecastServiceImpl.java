@@ -29,16 +29,16 @@ public class SupplyForecastServiceImpl implements SupplyForecastService {
     @Override
     public SupplyForecast getForecastById(Long id) {
         return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Forecast not found"));
+                .orElseThrow(() -> new RuntimeException("SupplyForecast not found"));
     }
 
     @Override
     public SupplyForecast updateForecast(Long id, SupplyForecast updated) {
         SupplyForecast existing = getForecastById(id);
 
-        // ✅ USE ENTITY FIELD NAMES (NO GUESS)
-        existing.setPowerAvailable(updated.getPowerAvailable());
-        existing.setTimestamp(updated.getTimestamp());
+        existing.setAvailableSupplyMW(updated.getAvailableSupplyMW());
+        existing.setForecastStart(updated.getForecastStart());
+        existing.setForecastEnd(updated.getForecastEnd());
 
         return repo.save(existing);
     }
