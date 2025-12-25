@@ -17,31 +17,37 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
+    public Zone createZone(Zone zone) {
+        zone.setActive(true);
+        return repo.save(zone);
+    }
+
+    @Override
     public List<Zone> getAllZones() {
         return repo.findAll();
     }
 
     @Override
     public Zone getZoneById(Long id) {
-        return repo.findById(id).orElse(null);
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Zone not found"));
     }
 
     @Override
-    public Zone createZone(Zone zone) {
-        return repo.save(zone);
-    }
+    public Zone updateZone(Long id, Zone updated) {
+        Zone existing = getZoneById(id);
 
-    @Override
-    public Zone updateZone(Long id, Zone zone) {
-        zone.setId(id);
-        return repo.save(zone);
+        existing.setZoneName(updated.getZoneName());
+        existing.setPriorityLevel(updated.getPriorityLevel());
+        existing.setPopulation(updated.getPopulation());
+
+        return repo.save(existing);
     }
 
     @Override
     public void deactivateZone(Long id) {
-        repo.findById(id).ifPresent(z -> {
-            z.setActive(false);
-            repo.save(z);
-        });
+        Zone zone = getZoneById(id);
+        zone.setActive(false);
+        repo.save(zone);
     }
 }

@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.DemandReading;
 import com.example.demo.repository.DemandReadingRepository;
 import com.example.demo.service.DemandReadingService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,8 +28,11 @@ public class DemandReadingServiceImpl implements DemandReadingService {
     }
 
     @Override
-    public List<DemandReading> getRecentReadings(Long zoneId, int limit) {
-        return repo.findTopNByZoneId(zoneId, limit);
+    public List<DemandReading> getRecentReadings(Long zoneId, int count) {
+        return repo.findByZoneIdOrderByTimestampDesc(
+                zoneId,
+                PageRequest.of(0, count)
+        );
     }
 
     @Override
