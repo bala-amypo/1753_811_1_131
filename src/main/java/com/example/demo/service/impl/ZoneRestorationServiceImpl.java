@@ -5,6 +5,7 @@ import com.example.demo.repository.ZoneRestorationRecordRepository;
 import com.example.demo.service.ZoneRestorationService;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -17,9 +18,8 @@ public class ZoneRestorationServiceImpl implements ZoneRestorationService {
     }
 
     @Override
-    public ZoneRestorationRecord restoreZone(Long eventId) {
-        ZoneRestorationRecord record = new ZoneRestorationRecord();
-        record.setEventId(eventId);
+    public ZoneRestorationRecord create(ZoneRestorationRecord record) {
+        record.setRestoredAt(Instant.now());
         return repo.save(record);
     }
 
