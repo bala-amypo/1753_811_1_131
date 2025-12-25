@@ -7,9 +7,9 @@ public interface LoadSheddingService {
 
     LoadSheddingEvent triggerLoadShedding(Long forecastId);
 
-    LoadSheddingEvent getById(Long id);
+    LoadSheddingEvent getEventById(Long id);
 
-    List<LoadSheddingEvent> getAll();
+    List<LoadSheddingEvent> getEventsForZone(Long zoneId);
 
-    List<LoadSheddingEvent> getByZone(Long zoneId);
+    List<LoadSheddingEvent> getAllEvents();
 }

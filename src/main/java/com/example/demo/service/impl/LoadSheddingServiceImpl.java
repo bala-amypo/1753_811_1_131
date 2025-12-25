@@ -1,64 +1,56 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.*;
-import com.example.demo.repository.*;
+import com.example.demo.entity.LoadSheddingEvent;
+import com.example.demo.entity.SupplyForecast;
+import com.example.demo.repository.LoadSheddingEventRepository;
+import com.example.demo.repository.SupplyForecastRepository;
 import com.example.demo.service.LoadSheddingService;
+
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Service
 public class LoadSheddingServiceImpl implements LoadSheddingService {
 
-    private final SupplyForecastRepository supplyForecastRepository;
-    private final ZoneRepository zoneRepository;
-    private final DemandReadingRepository demandReadingRepository;
-    private final LoadSheddingEventRepository loadSheddingEventRepository;
+    private final SupplyForecastRepository forecastRepo;
+    private final LoadSheddingEventRepository eventRepo;
 
     public LoadSheddingServiceImpl(
-            SupplyForecastRepository supplyForecastRepository,
-            ZoneRepository zoneRepository,
-            DemandReadingRepository demandReadingRepository,
-            LoadSheddingEventRepository loadSheddingEventRepository) {
-
-        this.supplyForecastRepository = supplyForecastRepository;
-        this.zoneRepository = zoneRepository;
-        this.demandReadingRepository = demandReadingRepository;
-        this.loadSheddingEventRepository = loadSheddingEventRepository;
+            SupplyForecastRepository forecastRepo,
+            LoadSheddingEventRepository eventRepo) {
+        this.forecastRepo = forecastRepo;
+        this.eventRepo = eventRepo;
     }
 
     @Override
     public LoadSheddingEvent triggerLoadShedding(Long forecastId) {
-
         SupplyForecast forecast =
-                supplyForecastRepository.findById(forecastId).orElse(null);
+                forecastRepo.findById(forecastId).orElse(null);
+
         if (forecast == null) return null;
 
-        Zone zone = zoneRepository.findById(forecast.getZone().getId()).orElse(null);
-        if (zone == null) return null;
-
         LoadSheddingEvent event = new LoadSheddingEvent();
-        event.setZone(zone);
         event.setForecast(forecast);
-        event.setTriggeredAt(LocalDateTime.now());
+        event.setTriggeredAt(Instant.now());
         event.setStatus("TRIGGERED");
 
-        return loadSheddingEventRepository.save(event);
+        return eventRepo.save(event);
     }
 
     @Override
-    public LoadSheddingEvent getById(Long id) {
-        return loadSheddingEventRepository.findById(id).orElse(null);
+    public LoadSheddingEvent getEventById(Long id) {
+        return eventRepo.findById(id).orElse(null);
     }
 
     @Override
-    public List<LoadSheddingEvent> getAll() {
-        return loadSheddingEventRepository.findAll();
+    public List<LoadSheddingEvent> getEventsForZone(Long zoneId) {
+        return eventRepo.findByForecastZoneId(zoneId);
     }
 
     @Override
-    public List<LoadSheddingEvent> getByZone(Long zoneId) {
-        return loadSheddingEventRepository.findByZoneId(zoneId);
+    public List<LoadSheddingEvent> getAllEvents() {
+        return eventRepo.findAll();
     }
 }
