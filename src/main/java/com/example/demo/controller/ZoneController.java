@@ -1,9 +1,15 @@
-package com.example.demo.controller;
-
-import org.springframework.web.bind.annotation.*;
-
 @RestController
-@RequestMapping("/api/zones")
+@RequestMapping("/zones")
 public class ZoneController {
-    // No methods needed for tests
+
+    private final ZoneService zoneService;
+
+    public ZoneController(ZoneService zoneService) {
+        this.zoneService = zoneService;
+    }
+
+    @GetMapping
+    public List<Zone> getAllZones() {
+        return zoneService.getAllZones();
+    }
 }

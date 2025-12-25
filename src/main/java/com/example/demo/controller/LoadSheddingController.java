@@ -1,8 +1,15 @@
-package com.example.demo.controller;
-
-import org.springframework.web.bind.annotation.*;
-
 @RestController
-@RequestMapping("/api/load-shedding")
+@RequestMapping("/load-shedding")
 public class LoadSheddingController {
+
+    private final LoadSheddingService service;
+
+    public LoadSheddingController(LoadSheddingService service) {
+        this.service = service;
+    }
+
+    @PostMapping("/trigger")
+    public LoadSheddingEvent trigger() {
+        return service.triggerLoadShedding();
+    }
 }
