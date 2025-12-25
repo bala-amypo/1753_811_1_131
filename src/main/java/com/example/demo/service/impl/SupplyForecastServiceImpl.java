@@ -1,48 +1,42 @@
+package com.example.demo.service.impl;
+
+import com.example.demo.entity.SupplyForecast;
+import com.example.demo.repository.SupplyForecastRepository;
+import com.example.demo.service.SupplyForecastService;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 public class SupplyForecastServiceImpl implements SupplyForecastService {
 
-    private final SupplyForecastRepository repo;
+    private final SupplyForecastRepository supplyForecastRepository;
 
-    public SupplyForecastServiceImpl(SupplyForecastRepository repo) {
-        this.repo = repo;
+    public SupplyForecastServiceImpl(SupplyForecastRepository supplyForecastRepository) {
+        this.supplyForecastRepository = supplyForecastRepository;
     }
 
     @Override
-    public SupplyForecast createForecast(SupplyForecast s) {
-        validate(s);
-        s.setGeneratedAt(Instant.now());
-        return repo.save(s);
+    public SupplyForecast createForecast(SupplyForecast forecast) {
+        forecast.setGeneratedAt(LocalDateTime.now());
+        return supplyForecastRepository.save(forecast);
     }
 
     @Override
-    public SupplyForecast updateForecast(Long id, SupplyForecast s) {
-        SupplyForecast existing = repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Forecast not found"));
-
-        validate(s);
-        existing.setAvailableSupplyMW(s.getAvailableSupplyMW());
-        existing.setForecastStart(s.getForecastStart());
-        existing.setForecastEnd(s.getForecastEnd());
-
-        return repo.save(existing);
-    }
-
-    @Override
-    public SupplyForecast getLatestForecast() {
-        return repo.findFirstByOrderByGeneratedAtDesc()
-                .orElseThrow(() -> new ResourceNotFoundException("No forecasts"));
+    public SupplyForecast getForecastById(Long id) {
+        return supplyForecastRepository.findById(id).orElse(null);
     }
 
     @Override
     public List<SupplyForecast> getAllForecasts() {
-        return repo.findAll();
+        return supplyForecastRepository.findAll();
     }
 
-    private void validate(SupplyForecast s) {
-        if (s.getAvailableSupplyMW() < 0)
-            throw new BadRequestException(">= 0");
-
-        if (!s.getForecastStart().isBefore(s.getForecastEnd()))
-            throw new BadRequestException("range");
+    @Override
+    public SupplyForecast getLatestForecast() {
+        return supplyForecastRepository
+                .findTopByOrderByGeneratedAtDesc()
+                .orElse(null);
     }
 }
