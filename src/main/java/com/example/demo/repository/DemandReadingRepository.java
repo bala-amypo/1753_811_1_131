@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DemandReadingRepository
-        extends JpaRepository<DemandReading, Long> {
+public interface DemandReadingRepository extends JpaRepository<DemandReading, Long> {
 
     List<DemandReading> findByZoneIdOrderByRecordedAtDesc(Long zoneId);
 
