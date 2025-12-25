@@ -32,4 +32,13 @@ public class ZoneRestorationServiceImpl implements ZoneRestorationService {
     public List<ZoneRestorationRecord> getByZone(Long zoneId) {
         return repo.findByZoneId(zoneId);
     }
+    @Override
+public ZoneRestorationRecord restoreZone(Long zoneId) {
+    ZoneRestorationRecord record = new ZoneRestorationRecord();
+    record.setZoneId(zoneId);
+    record.setAction("RESTORED");
+    record.setRestoredAt(Instant.now());
+    return repo.save(record);
+}
+
 }
