@@ -5,13 +5,10 @@ import java.util.List;
 
 public interface ZoneService {
 
-    Zone createZone(Zone zone);
-
-    Zone updateZone(Long id, Zone zone);
-
-    Zone getZone(Long id);
-
     List<Zone> getAllZones();
-
+    Zone getZoneById(Long id);
+    Zone createZone(Zone zone);
+    Zone updateZone(Long id, Zone zone);
     void deactivateZone(Long id);
 }
+
