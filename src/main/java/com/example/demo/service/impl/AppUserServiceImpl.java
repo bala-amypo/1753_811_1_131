@@ -1,14 +1,13 @@
 package com.example.demo.service.impl;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
+import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.entity.AppUser;
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.AppUserRepository;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.AppUserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AppUserServiceImpl implements AppUserService {
@@ -26,34 +25,34 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUser register(String email, String password, String role) {
+    public AuthResponse login(AuthRequest request) {
 
-        if (userRepository.findByEmail(email).isPresent()) {
-            throw new BadRequestException("Email must be unique");
+        AppUser user = userRepository
+                .findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
         }
-AppUser user = new AppUser();
-user.setEmail(request.getEmail());
-user.setPassword(encodedPassword);
-user.setRole("USER");
 
-userRepository.save(user);
+        String token = jwtTokenProvider.generateToken(user);
 
-        return userRepository.save(user);
+        return new AuthResponse(
+                user.getId(),
+                user.getEmail(),
+                user.getRole(),
+                token
+        );
     }
 
     @Override
-    public AuthResponse login(String email, String password) {
+    public void register(AuthRequest request) {
 
-        AppUser user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new BadRequestException("Invalid credentials"));
+        AppUser user = new AppUser();
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole("USER");   // make sure field exists in entity
 
-        String token = jwtTokenProvider.createToken(user);
-
-        return AuthResponse.builder()
-                .token(token)
-                .userId(user.getId())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .build();
+        userRepository.save(user);
     }
 }
