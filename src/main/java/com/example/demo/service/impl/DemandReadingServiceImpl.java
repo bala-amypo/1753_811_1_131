@@ -30,18 +30,20 @@ public class DemandReadingServiceImpl implements DemandReadingService {
     }
 
     @Override
-    public List<DemandReading> getRecentReadings(Long zoneId, int limit) {
+    public List<DemandReading> getRecentByZone(Long zoneId) {
         return repo.findByZoneIdOrderByRecordedAtDesc(
                 zoneId,
-                PageRequest.of(0, limit)
+                PageRequest.of(0, 5)
         );
     }
 
     @Override
-    public DemandReading getLatestReading(Long zoneId) {
-        return repo.findByZoneIdOrderByRecordedAtDesc(
-                zoneId,
-                PageRequest.of(0, 1)
-        ).stream().findFirst().orElse(null);
+    public DemandReading getLatestByZone(Long zoneId) {
+        List<DemandReading> list =
+                repo.findByZoneIdOrderByRecordedAtDesc(
+                        zoneId,
+                        PageRequest.of(0, 1)
+                );
+        return list.isEmpty() ? null : list.get(0);
     }
 }
