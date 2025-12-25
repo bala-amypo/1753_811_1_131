@@ -6,7 +6,6 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Spring Boot Parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -26,9 +25,9 @@
 
     <dependencies>
 
-        <!-- ========================= -->
+        <!-- ===================== -->
         <!-- Spring Boot Core -->
-        <!-- ========================= -->
+        <!-- ===================== -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -40,15 +39,15 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Security (for PasswordEncoder + JWT support) -->
+        <!-- Security (PasswordEncoder) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- ========================= -->
+        <!-- ===================== -->
         <!-- Swagger / OpenAPI -->
-        <!-- ========================= -->
+        <!-- ===================== -->
 
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -56,19 +55,33 @@
             <version>2.5.0</version>
         </dependency>
 
-        <!-- ========================= -->
-        <!-- JWT -->
-        <!-- ========================= -->
+        <!-- ===================== -->
+        <!-- JWT (Java 17 SAFE) -->
+        <!-- ===================== -->
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.5</version>
         </dependency>
 
-        <!-- ========================= -->
-        <!-- Database (H2 for Preview) -->
-        <!-- ========================= -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- ===================== -->
+        <!-- Database (H2) -->
+        <!-- ===================== -->
 
         <dependency>
             <groupId>com.h2database</groupId>
@@ -76,9 +89,9 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- ========================= -->
+        <!-- ===================== -->
         <!-- Lombok -->
-        <!-- ========================= -->
+        <!-- ===================== -->
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -86,9 +99,9 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- ========================= -->
+        <!-- ===================== -->
         <!-- Testing -->
-        <!-- ========================= -->
+        <!-- ===================== -->
 
         <!-- TestNG -->
         <dependency>
@@ -98,7 +111,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Mockito (REQUIRED for SomethingTests) -->
+        <!-- Mockito -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -111,7 +124,6 @@
     <build>
         <plugins>
 
-            <!-- Spring Boot Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
