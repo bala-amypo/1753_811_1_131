@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/demand-readings")
+@RequestMapping("/api/demand")
 public class DemandReadingController {
 
     private final DemandReadingService service;
@@ -16,29 +16,27 @@ public class DemandReadingController {
         this.service = service;
     }
 
-    // POST /api/demand-readings
+    // create reading
     @PostMapping
     public DemandReading create(@RequestBody DemandReading reading) {
         return service.create(reading);
     }
 
-    // GET /api/demand-readings/zone/{zoneId}
+    // all readings of a zone
     @GetMapping("/zone/{zoneId}")
     public List<DemandReading> getByZone(@PathVariable Long zoneId) {
         return service.getByZone(zoneId);
     }
 
-    // GET /api/demand-readings/zone/{zoneId}/recent
+    // recent readings (last 5 – fixed in service)
     @GetMapping("/zone/{zoneId}/recent")
-    public List<DemandReading> recent(
-            @PathVariable Long zoneId,
-            @RequestParam(defaultValue = "5") int limit) {
-        return service.getRecentReadings(zoneId, limit);
+    public List<DemandReading> getRecent(@PathVariable Long zoneId) {
+        return service.getRecentByZone(zoneId);
     }
 
-    // GET /api/demand-readings/zone/{zoneId}/latest
+    // latest reading
     @GetMapping("/zone/{zoneId}/latest")
-    public DemandReading latest(@PathVariable Long zoneId) {
-        return service.getLatestReading(zoneId);
+    public DemandReading getLatest(@PathVariable Long zoneId) {
+        return service.getLatestByZone(zoneId);
     }
 }
