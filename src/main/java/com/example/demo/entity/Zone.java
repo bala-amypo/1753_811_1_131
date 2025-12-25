@@ -1,58 +1,41 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+import java.time.Instant;
 
 @Entity
+@Getter @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Zone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String zoneName;
-    private int priorityLevel;
-    private int population;
-    private boolean active;
 
-    public Zone() {}
+    private Integer priorityLevel;
+    private Integer population;
 
-    public Long getId() {
-        return id;
+    @Builder.Default
+    private Boolean active = true;
+
+    private Instant createdAt;
+    private Instant updatedAt;
+
+    @PrePersist
+    void prePersist() {
+        createdAt = Instant.now();
+        updatedAt = Instant.now();
+        if (active == null) active = true;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getZoneName() {
-        return zoneName;
-    }
-
-    public void setZoneName(String zoneName) {
-        this.zoneName = zoneName;
-    }
-
-    public int getPriorityLevel() {
-        return priorityLevel;
-    }
-
-    public void setPriorityLevel(int priorityLevel) {
-        this.priorityLevel = priorityLevel;
-    }
-
-    public int getPopulation() {
-        return population;
-    }
-
-    public void setPopulation(int population) {
-        this.population = population;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
+    @PreUpdate
+    void preUpdate() {
+        updatedAt = Instant.now();
     }
 }

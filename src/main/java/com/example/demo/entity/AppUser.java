@@ -4,25 +4,20 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String password;
-
     private String role;
-
-    @Builder.Default
-    private Boolean active = true;
+    private Boolean active;
 }

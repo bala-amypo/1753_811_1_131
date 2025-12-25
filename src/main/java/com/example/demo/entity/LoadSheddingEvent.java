@@ -1,9 +1,14 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import java.time.Instant;
 
 @Entity
+@Getter @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoadSheddingEvent {
 
     @Id
@@ -11,37 +16,11 @@ public class LoadSheddingEvent {
     private Long id;
 
     @ManyToOne
-    private SupplyForecast forecast;
+    private Zone zone;
 
-    private Instant triggeredAt;
-
-    private String status;
-
-    public Long getId() {
-        return id;
-    }
-
-    public SupplyForecast getForecast() {
-        return forecast;
-    }
-
-    public void setForecast(SupplyForecast forecast) {
-        this.forecast = forecast;
-    }
-
-    public Instant getTriggeredAt() {
-        return triggeredAt;
-    }
-
-    public void setTriggeredAt(Instant triggeredAt) {
-        this.triggeredAt = triggeredAt;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    private Instant eventStart;
+    private Instant eventEnd;
+    private String reason;
+    private Long triggeredByForecastId;
+    private Double expectedDemandReductionMW;
 }
