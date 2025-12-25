@@ -1,19 +1,13 @@
 package com.example.demo.repository;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import com.example.demo.entity.DemandReading;
+import java.util.*;
 
-@Repository
-public interface DemandReadingRepository extends JpaRepository<DemandReading, Long> {
+public interface DemandReadingRepository {
 
-    // ✅ Get latest reading for a zone
-    Optional<DemandReading> findFirstByZoneIdOrderByRecordedAtDesc(Long zoneId);
+    DemandReading save(DemandReading reading);
 
-    // ✅ Get all readings for a zone (latest first)
-    List<DemandReading> findByZoneIdOrderByRecordedAtDesc(Long zoneId);
+    List<DemandReading> findByZoneId(Long zoneId);
+
+    Optional<DemandReading> findTopByZoneIdOrderByRecordedAtDesc(Long zoneId);
 }

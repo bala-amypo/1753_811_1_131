@@ -1,15 +1,13 @@
 package com.example.demo.repository;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.example.demo.entity.Zone;
+import java.util.*;
 
-public interface ZoneRepository extends JpaRepository<Zone, Long> {
+public interface ZoneRepository {
 
-    Optional<Zone> findByZoneName(String zoneName);
+    Zone save(Zone zone);
 
-    List<Zone> findByActiveTrueOrderByPriorityLevelAsc();
+    Optional<Zone> findById(Long id);
+
+    List<Zone> findAll();
 }
