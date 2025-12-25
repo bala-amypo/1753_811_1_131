@@ -16,11 +16,6 @@ public class DemandReadingController {
         this.service = service;
     }
 
-    @PostMapping
-    public DemandReading create(@RequestBody DemandReading r) {
-        return service.create(r);
-    }
-
     @GetMapping("/zone/{zoneId}")
     public List<DemandReading> getByZone(@PathVariable Long zoneId) {
         return service.getByZone(zoneId);
