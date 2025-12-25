@@ -28,9 +28,9 @@ public class SecurityConfig {
                         "/h2-console/**",
                         "/auth/**"
                 ).permitAll()
-                .anyRequest().permitAll()   // keep OPEN for now
+                .anyRequest().permitAll()
             )
-            .headers(headers -> headers.frameOptions().disable()); // H2 console
+            .headers(headers -> headers.frameOptions().disable());
 
         return http.build();
     }
