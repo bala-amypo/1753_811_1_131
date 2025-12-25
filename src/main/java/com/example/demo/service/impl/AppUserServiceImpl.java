@@ -31,13 +31,12 @@ public class AppUserServiceImpl implements AppUserService {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new BadRequestException("Email must be unique");
         }
+AppUser user = new AppUser();
+user.setEmail(request.getEmail());
+user.setPassword(encodedPassword);
+user.setRole("USER");
 
-        AppUser user = AppUser.builder()
-                .email(email)
-                .password(passwordEncoder.encode(password))
-                .role(role)
-                .active(true)
-                .build();
+userRepository.save(user);
 
         return userRepository.save(user);
     }
