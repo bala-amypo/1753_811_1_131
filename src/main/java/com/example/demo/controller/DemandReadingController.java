@@ -17,7 +17,10 @@ public class DemandReadingController {
     }
 
     @GetMapping("/zone/{zoneId}")
-    public List<DemandReading> getByZone(@PathVariable Long zoneId) {
-        return service.getByZone(zoneId);
+    public List<DemandReading> getRecent(
+            @PathVariable Long zoneId,
+            @RequestParam(defaultValue = "5") int limit
+    ) {
+        return service.getRecentReadings(zoneId, limit);
     }
 }

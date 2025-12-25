@@ -16,6 +16,6 @@ public class LoadSheddingController {
 
     @PostMapping("/trigger")
     public LoadSheddingEvent trigger() {
-        return service.trigger();
+        return service.triggerLoadShedding();
     }
 }
