@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
-
-import com.example.demo.entity.Zone;
-import com.example.demo.service.ZoneService;
+import com.example.demo.entity.ZoneRestorationRecord;
+import com.example.demo.service.ZoneRestorationService;
 import org.springframework.web.bind.annotation.*;
-@RestController
+import java.util.List;
+
 @RequestMapping("/api/restorations")
 public class ZoneRestorationController {
 

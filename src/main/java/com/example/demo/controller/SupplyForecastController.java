@@ -1,9 +1,9 @@
 package com.example.demo.controller;
-
-
-import com.example.demo.entity.Zone;
-import com.example.demo.service.ZoneService;
+import com.example.demo.entity.SupplyForecast;
+import com.example.demo.service.SupplyForecastService;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/forecasts")
 public class SupplyForecastController {
