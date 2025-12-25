@@ -10,19 +10,22 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 
-@Component   // 🔥 THIS IS THE MISSING PIECE
+@Component   // 🔥 VERY IMPORTANT – without this Spring won't detect the bean
 public class JwtTokenProvider {
 
     private static final Key KEY =
-            Keys.hmacShaKeyFor("thisIsASecretKeyForJwtTokenGeneration12345".getBytes());
+            Keys.hmacShaKeyFor(
+                    "thisIsASecretKeyForJwtTokenGeneration12345".getBytes()
+            );
 
-    public String createToken(AppUser user) {
+    // ✅ USED BY AppUserServiceImpl
+    public String generateToken(AppUser user) {
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("role", user.getRole())
                 .claim("userId", user.getId())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 day
                 .signWith(KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
