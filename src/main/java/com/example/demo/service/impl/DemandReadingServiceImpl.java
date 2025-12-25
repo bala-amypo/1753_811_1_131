@@ -11,52 +11,25 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+@RestController
+@RequestMapping("/api/demand-readings")
+public class DemandReadingController {
 
-@Service
-public class DemandReadingServiceImpl implements DemandReadingService {
+    private final DemandReadingService service;
 
-    private final DemandReadingRepository repo;
-    private final ZoneRepository zoneRepo;
-
-    public DemandReadingServiceImpl(DemandReadingRepository repo, ZoneRepository zoneRepo) {
-        this.repo = repo;
-        this.zoneRepo = zoneRepo;
+    public DemandReadingController(DemandReadingService service) {
+        this.service = service;
     }
 
-    @Override
-    public DemandReading createReading(DemandReading r) {
-        Long zoneId = r.getZone().getId();
-
-        Zone z = zoneRepo.findById(zoneId)
-                .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
-
-        if (r.getDemandMW() < 0)
-            throw new BadRequestException(">= 0");
-
-        if (r.getRecordedAt().isAfter(Instant.now()))
-            throw new BadRequestException("future");
-
-        r.setZone(z);
-        return repo.save(r);
+    // already exists
+    @GetMapping("/zone/{zoneId}")
+    public List<DemandReading> getByZone(@PathVariable Long zoneId) {
+        return service.getReadingsForZone(zoneId);
     }
 
-    @Override
-    public DemandReading getLatestReading(Long zoneId) {
-        return repo.findFirstByZoneIdOrderByRecordedAtDesc(zoneId)
-                .orElseThrow(() -> new ResourceNotFoundException("No readings"));
-    }
-
-    @Override
-    public List<DemandReading> getReadingsForZone(Long zoneId) {
-        zoneRepo.findById(zoneId)
-                .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
-
-        return repo.findByZoneIdOrderByRecordedAtDesc(zoneId);
-    }
-
-    @Override
-    public List<DemandReading> getRecentReadings(Long zoneId, int limit) {
-        List<DemandReading> all = getReadingsForZone(zoneId);
-        return all.subList(0, Math.min(limit, all.size()));
+    // ➕ ADD
+    @PostMapping
+    public DemandReading create(@RequestBody DemandReading reading) {
+        return service.createReading(reading);
     }
 }

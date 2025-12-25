@@ -15,7 +15,7 @@ public class DemandReadingController {
     }
 
     // already exists
-    @GetMapping("/zone/{zoneId}")
+    @GetMappingv("/zone/{zoneId}")
     public List<DemandReading> getByZone(@PathVariable Long zoneId) {
         return service.getReadingsForZone(zoneId);
     }
