@@ -1,14 +1,12 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.*;
 import java.time.Instant;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 public class DemandReading {
 
     @Id
@@ -17,7 +15,5 @@ public class DemandReading {
 
     private Long zoneId;
     private Double demandMW;
-
-    // 🔥 REQUIRED
     private Instant recordedAt;
 }

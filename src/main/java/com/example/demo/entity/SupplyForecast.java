@@ -6,9 +6,7 @@ import java.time.Instant;
 
 @Entity
 @Getter @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 public class SupplyForecast {
 
     @Id
@@ -18,10 +16,4 @@ public class SupplyForecast {
     private Double availableSupplyMW;
     private Instant forecastStart;
     private Instant forecastEnd;
-    private Instant generatedAt;
-
-    @PrePersist
-    void gen() {
-        generatedAt = Instant.now();
-    }
 }
