@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -5,16 +6,19 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Spring Boot Parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.3.4</version>
+        <relativePath/>
     </parent>
 
     <groupId>com.example</groupId>
     <artifactId>demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>demo</name>
+    <description>Smart Grid Load Shedding Controller</description>
 
     <properties>
         <java.version>17</java.version>
@@ -22,51 +26,69 @@
 
     <dependencies>
 
-        <!-- Web -->
+        <!-- ========================= -->
+        <!-- Spring Boot Core -->
+        <!-- ========================= -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Security (for PasswordEncoder) -->
+        <!-- Security (for PasswordEncoder + JWT support) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- Swagger -->
+        <!-- ========================= -->
+        <!-- Swagger / OpenAPI -->
+        <!-- ========================= -->
+
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.5.0</version>
         </dependency>
 
+        <!-- ========================= -->
         <!-- JWT -->
+        <!-- ========================= -->
+
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
         </dependency>
 
-        <!-- H2 -->
+        <!-- ========================= -->
+        <!-- Database (H2 for Preview) -->
+        <!-- ========================= -->
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
 
+        <!-- ========================= -->
         <!-- Lombok -->
+        <!-- ========================= -->
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!-- ========================= -->
+        <!-- Testing -->
+        <!-- ========================= -->
 
         <!-- TestNG -->
         <dependency>
@@ -76,14 +98,25 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Mockito (REQUIRED for SomethingTests) -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.12.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
+
+            <!-- Spring Boot Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
         </plugins>
     </build>
 
