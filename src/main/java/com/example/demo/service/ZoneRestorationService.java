@@ -1,13 +1,17 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.ZoneRestorationRecord;
+import com.example.demo.entity.Zone;
 import java.util.List;
 
-public interface ZoneRestorationService {
+public interface ZoneService {
 
-    ZoneRestorationRecord restoreZone(ZoneRestorationRecord record);
+    Zone createZone(Zone zone);
 
-    ZoneRestorationRecord getById(Long id);
+    Zone updateZone(Long id, Zone updatedZone);
 
-    List<ZoneRestorationRecord> getByZone(Long zoneId);
+    Zone getZoneById(Long id);
+
+    List<Zone> getAllZones();
+
+    void deactivateZone(Long id);
 }

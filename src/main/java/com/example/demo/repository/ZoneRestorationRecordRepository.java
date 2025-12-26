@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ZoneRestorationRepository
+public interface ZoneRestorationRecordRepository
         extends JpaRepository<ZoneRestorationRecord, Long> {
 
     List<ZoneRestorationRecord> findByZoneId(Long zoneId);
