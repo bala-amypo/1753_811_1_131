@@ -1,56 +1,49 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Zone;
-import com.example.demo.entity.ZoneRestorationRecord;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ZoneRepository;
-import com.example.demo.repository.ZoneRestorationRepository;
-import com.example.demo.service.ZoneRestorationService;
+import com.example.demo.service.ZoneRepositoryService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class ZoneRestorationServiceImpl implements ZoneRestorationService {
+public class ZoneRepositoryServiceImpl implements ZoneRepositoryService {
 
-    private final ZoneRestorationRepository restorationRepo;
-    private final ZoneRepository zoneRepo;
+    private final ZoneRepository zoneRepository;
 
-    public ZoneRestorationServiceImpl(
-            ZoneRestorationRepository restorationRepo,
-            ZoneRepository zoneRepo) {
-        this.restorationRepo = restorationRepo;
-        this.zoneRepo = zoneRepo;
+    public ZoneRepositoryServiceImpl(ZoneRepository zoneRepository) {
+        this.zoneRepository = zoneRepository;
     }
 
     @Override
-    public ZoneRestorationRecord restoreZone(ZoneRestorationRecord record) {
-
-        Zone zone = zoneRepo.findById(record.getZone().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
-
-        zone.setActive(true);
-        zoneRepo.save(zone);
-
-        record.setZone(zone);
-        record.setRestoredAt(
-                record.getRestoredAt() != null
-                        ? record.getRestoredAt()
-                        : LocalDateTime.now()
-        );
-
-        return restorationRepo.save(record);
+    public Zone save(Zone zone) {
+        return zoneRepository.save(zone);
     }
 
     @Override
-    public ZoneRestorationRecord getById(Long id) {
-        return restorationRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Restoration not found"));
+    public Optional<Zone> findById(Long id) {
+        return zoneRepository.findById(id);
     }
 
     @Override
-    public List<ZoneRestorationRecord> getByZone(Long zoneId) {
-        return restorationRepo.findByZoneId(zoneId);
+    public Optional<Zone> findByZoneName(String zoneName) {
+        return zoneRepository.findByZoneName(zoneName);
+    }
+
+    @Override
+    public List<Zone> findAll() {
+        return zoneRepository.findAll();
+    }
+
+    @Override
+    public List<Zone> findActiveZonesByPriority() {
+        return zoneRepository.findByActiveTrueOrderByPriorityLevelAsc();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        zoneRepository.deleteById(id);
     }
 }
