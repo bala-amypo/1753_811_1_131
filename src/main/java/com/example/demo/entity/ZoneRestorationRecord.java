@@ -1,14 +1,16 @@
-package com.example.demo.entity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import java.time.Instant;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "zone_restoration_record")
 public class ZoneRestorationRecord {
 
     @Id
@@ -16,7 +18,6 @@ public class ZoneRestorationRecord {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "zone_id")
     private Zone zone;
 
     private Long eventId;
