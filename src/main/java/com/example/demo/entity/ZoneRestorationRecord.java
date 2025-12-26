@@ -3,8 +3,10 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.Instant;
-
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "zone_restoration_record")
 public class ZoneRestorationRecord {

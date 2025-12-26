@@ -1,21 +1,14 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Zone;
+import com.example.demo.entity.ZoneRestorationRecord;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface ZoneRepositoryService {
+public interface ZoneRestorationService {
 
-    Zone save(Zone zone);
+    ZoneRestorationRecord restoreZone(ZoneRestorationRecord record);
 
-    Optional<Zone> findById(Long id);
+    ZoneRestorationRecord getRecordById(Long id);
 
-    Optional<Zone> findByZoneName(String zoneName);
-
-    List<Zone> findAll();
-
-    List<Zone> findActiveZonesByPriority();
-
-    void deleteById(Long id);
+    List<ZoneRestorationRecord> getRecordsForZone(Long zoneId);
 }
