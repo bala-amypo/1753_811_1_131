@@ -26,7 +26,7 @@ public class ZoneServiceImpl implements ZoneService {
             throw new BadRequestException("Zone name must be unique");
 
         zone.setActive(true);
-        zone.setUpdatedAt(Instant.now());   // ✅ needed
+        zone.setUpdatedAt(Instant.now());  
         return zoneRepo.save(zone);
     }
 
@@ -39,7 +39,7 @@ public class ZoneServiceImpl implements ZoneService {
         zone.setPriorityLevel(updated.getPriorityLevel());
         zone.setPopulation(updated.getPopulation());
         zone.setActive(updated.getActive());
-        zone.setUpdatedAt(Instant.now());   // ✅ test 44
+        zone.setUpdatedAt(Instant.now());  
 
         return zoneRepo.save(zone);
     }
