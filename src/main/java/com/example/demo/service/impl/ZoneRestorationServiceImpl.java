@@ -1,9 +1,13 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.*;
+import com.example.demo.entity.LoadSheddingEvent;
+import com.example.demo.entity.Zone;
+import com.example.demo.entity.ZoneRestorationRecord;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.*;
+import com.example.demo.repository.LoadSheddingEventRepository;
+import com.example.demo.repository.ZoneRepository;
+import com.example.demo.repository.ZoneRestorationRecordRepository;
 import com.example.demo.service.ZoneRestorationService;
 import org.springframework.stereotype.Service;
 
@@ -40,9 +44,7 @@ public class ZoneRestorationServiceImpl implements ZoneRestorationService {
         Zone zone = zoneRepo.findById(record.getZone().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
 
-        zone.setActive(true);
-        zoneRepo.save(zone);
-
+        record.setZone(zone);
         return restorationRepo.save(record);
     }
 

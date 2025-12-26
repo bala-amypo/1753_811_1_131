@@ -1,16 +1,16 @@
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import java.time.Instant;
 
-@Data
+@Entity
+@Table(name = "zone_restorations")
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 public class ZoneRestorationRecord {
 
     @Id
