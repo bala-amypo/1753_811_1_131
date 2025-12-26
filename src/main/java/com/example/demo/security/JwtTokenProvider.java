@@ -15,7 +15,6 @@ public class JwtTokenProvider {
 
     private static final long VALIDITY_MS = 3600000; // 1 hour
 
-    // ✅ Constructor-based init (TEST-SAFE)
     public JwtTokenProvider() {
         this.secretKey = Keys.hmacShaKeyFor(
                 "THIS_IS_A_SECURE_SECRET_KEY_FOR_JWT_SIGNING_256_BITS_LONG"
