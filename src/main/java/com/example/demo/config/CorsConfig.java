@@ -15,10 +15,8 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // VERY IMPORTANT
         config.setAllowCredentials(true);
 
-        // allow all origins (Swagger, browser, anything)
         config.setAllowedOriginPatterns(List.of("*"));
 
         config.setAllowedHeaders(List.of("*"));
